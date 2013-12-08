@@ -26,16 +26,16 @@ int main(int argc, char *argv[])
 {
     int listenfd = 0, connfd = 0;
     struct sockaddr_in serv_addr;
-    
+
     char buff[BUFF_LENGTH];
     time_t ticks;
-    
+
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     handle_error(listenfd, "socket");
 
     memset(&serv_addr, 0, sizeof(serv_addr));
     memset(buff, 0, sizeof(buff));
-    
+
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     serv_addr.sin_port = htons(5000);
@@ -43,12 +43,12 @@ int main(int argc, char *argv[])
     const int op = 1;
     handle_error(setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &op, 4),
                  "setsockopt");
-    
+
     handle_error(bind(listenfd, (struct sockaddr*)&serv_addr,
                       sizeof(serv_addr)), "bind");
-    
+
     handle_error(listen(listenfd, 10), "listen");
-    
+
     ssize_t readlen = 0, writelen = 0;
     char sendBuff[BUFF_LENGTH + TIME_LENGTH];
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
          // waiting for connection
         connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
         handle_error(connfd, "accept");
-    
+
         // connection established
         bool connection_loop = true;
         while(connection_loop)
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
                 close(connfd);
                 break;
             }
-            
+
             if (buff[0] == 'q' || buff[0] == 'Q')
             {
                 // client request of closing connection
@@ -95,13 +95,13 @@ int main(int argc, char *argv[])
                 close(connfd);
                 break;
             }
-            
+
             // get the time add to echo
             ticks = time(NULL);
             memset(sendBuff, 0, sizeof(sendBuff));
             snprintf(sendBuff, sizeof(sendBuff), "%.24s: ", ctime(&ticks));
             strcat(sendBuff, buff);
-            
+
             writelen = write(connfd, sendBuff, strlen(sendBuff));
             switch (writelen)
             {
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
                 close(connfd);
                 break;
             }
-            
+
             //sleep(SLEEP_INTERVAL);
         }
     }

@@ -8,8 +8,8 @@ CC = llvm-gcc
 else
 CC = gcc
 endif
-INCLUDE = -Iinclude
-LIB = -Llib
+#INCLUDE = -Iinclude
+#LIB = -Llib
 
 #===========================================================================
 # General Option
