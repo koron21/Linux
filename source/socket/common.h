@@ -12,6 +12,7 @@
 #define BUFF_LENGTH 1024    //!< buffer length for communicating
 
 
+#ifdef __DARWIN_ONLY_64_BIT_INO_T
 // explicit declaration to remove the warnings
 int  close(int) __DARWIN_ALIAS_C(close);
 
@@ -19,6 +20,7 @@ ssize_t	 read(int, void *, size_t) __DARWIN_ALIAS_C(read);
 ssize_t	 write(int, const void *, size_t) __DARWIN_ALIAS_C(write);
 
 unsigned int sleep(unsigned int) __DARWIN_ALIAS_C(sleep);
+#endif
 
 //! General socket-realted error handler that terminates the program on error.
 /*!
